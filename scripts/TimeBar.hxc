@@ -29,6 +29,11 @@ class TimeBar extends Module {
     override function onCountdownStart(event)
     {
         super.onCountdownStart(event);
+
+        // if (PlayState.instance.isInCutscene)
+        // {
+        //     return;
+        // }
         songpercentage = 0;
         var playerStrumline:FlxSprite = PlayState.instance.playerStrumline;
 
@@ -103,6 +108,7 @@ class TimeBar extends Module {
             super.onUpdate(event);
 
  
+ 
             if (FlxG.sound.music != null)
             {
                 songpercentage = (Conductor.instance.songPosition / FlxG.sound.music.length);
@@ -110,7 +116,8 @@ class TimeBar extends Module {
  
             if (PlayState.instance != null && save.data.timebar)
                 {
-                    if (timebar != null )
+       
+                    if (!PlayState.instance.isInCutscene && timebar != null )
                         {
                             timebar.value = songpercentage;
             
@@ -122,10 +129,6 @@ class TimeBar extends Module {
                 }
         }
 
-    override function onSongLoad(event)
-    {
-        super.onSongLoad(event);
-    }
 
     function initTimeBar()
     {
