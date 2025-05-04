@@ -1,0 +1,67 @@
+import funkin.modding.module.Module;
+import funkin.ui.options.PreferencesMenu;
+import funkin.ui.options.OptionsState;
+import flixel.FlxG;
+import flixel.util.FlxSave;
+import Std;
+
+
+class TimeBarOptions extends Module {
+
+
+    var save:FlxSave = new FlxSave();
+
+    function new (){
+        super("Time Bar Options", 22);
+        save = new FlxSave();
+        save.bind("TimeBarMod", "JugieNoob");
+
+        if (save.data.timebar == null)
+        {
+            save.data.timebar = true;
+        }
+        if (save.data.timebarmode == null)
+        {
+            save.data.timebarmode = true;
+        }
+        if (save.data.timebarpos == null)
+        {
+            save.data.timebarpos = false;
+        }
+        if (save.data.customtimebar == null)
+        {
+            save.data.customtimebar = false;
+        }
+    }
+
+    function onStateChangeEnd(event)
+    {
+        super.onStateChangeEnd(event);
+
+        if (Std.isOfType(event.targetState, OptionsState))
+            {
+      
+            var preferences = event.targetState.optionsCodex.pages.get("preferences");
+
+            preferences.createPrefItemCheckbox('Time Bar', 'Toggles the time bar.', function(value:Bool):Void {
+            save.data.timebar = value; }, save.data.timebar);
+
+            preferences.createPrefItemEnum('Time Bar Text', 'Set what text should appear on the time bar', ["None" => "None", "Time Elapsed" => "Time Elapsed", "Time Left" => "Time Left"],function(value:Bool):Void {
+                save.data.timebarmode = value;
+            }, save.data.timebarmode);      
+
+            preferences.createPrefItemEnum('Time Bar Position', 'Set where the time bar should be', ["Top" => "Top", "Right" => "Right", "Force Middle" => "Force Middle"], function(value:Bool):Void {
+                save.data.timebarpos = value;
+            }, save.data.timebarpos);      
+
+
+            preferences.createPrefItemCheckbox('Custom Time Bar', "Allows you to add your own timebar.", function(value:Bool):Void {
+            save.data.customtimebar = value; }, save.data.customtimebar);
+
+
+            save.flush();
+        }
+    }
+
+
+}

@@ -1,0 +1,233 @@
+import funkin.play.PlayState;
+import funkin.modding.module.Module;
+import funkin.Paths;
+import flixel.FlxSprite;
+import funkin.Conductor;
+import flixel.FlxG;
+import flixel.text.FlxText;
+import flixel.util.FlxSave;
+import flixel.ui.FlxBar;
+import flixel.math.FlxMath;
+import flixel.util.FlxStringUtil;
+import flixel.text.FlxTextBorderStyle;
+import funkin.Preferences;
+
+class TimeBar extends Module {
+
+    var timebar:FlxBar;
+    var background:FlxSprite;
+    var songpercentage:Float = 0;
+    var timetext:FlxText;
+    var save:FlxSave;
+
+    function new (){
+        super("TimeBarMod");
+        save = new FlxSave();
+        save.bind("TimeBarMod", "JugieNoob");
+    }
+
+    override function onCountdownStart(event)
+    {
+        super.onCountdownStart(event);
+        songpercentage = 0;
+        var playerStrumline:FlxSprite = PlayState.instance.playerStrumline;
+
+        if (save.data.timebar)
+        {
+            initTimeBar();
+            if (save.data.customtimebar)
+            {
+                customTimeBar();
+            }
+
+
+            switch (save.data.timebarpos)
+            {
+
+            
+                case "Top":
+
+                    timebar.setPosition((FlxG.width / 2 - timebar.width / 2) - 50 , 10);
+
+                    if (playerStrumline.x == FlxG.width / 2 - playerStrumline.width / 2 || PlayState.instance.currentSong == "Song(blazin)")
+                        {
+                            timebar.x = (FlxG.width / 2) - (timebar.width / 2);
+                        }
+       
+
+                    if (Preferences.downscroll)
+                        {
+                            timebar.y = FlxG.height - timebar.height - 10;
+                        }
+
+                    background.setPosition(timebar.x - 4, timebar.y - 4);
+                case "Right":
+                    verticalTimeBar();
+                case "Force Middle":
+                    timebar.setPosition( (FlxG.width / 2) - (timebar.width / 2), 10);
+
+                    if (Preferences.downscroll)
+                    {
+                        timebar.y = FlxG.height - timebar.height - 10;
+                    }
+                    background.setPosition(timebar.x - 4, timebar.y - 4);
+
+    
+
+            }
+
+            switch (save.data.timebarmode)
+            {
+                case "None":
+                
+                case "Time Elapsed":
+                    showTime();
+                
+                case "Time Left":
+                    showTime();
+                
+            }
+
+
+ 
+        }
+
+
+
+    }
+
+
+
+    override function onUpdate(event)
+        {
+            super.onUpdate(event);
+
+ 
+            if (FlxG.sound.music != null)
+            {
+                songpercentage = (Conductor.instance.songPosition / FlxG.sound.music.length);
+            }
+ 
+            if (PlayState.instance != null && save.data.timebar)
+                {
+                    if (timebar != null )
+                        {
+                            timebar.value = songpercentage;
+            
+                            if (timetext != null)
+                            {
+                                updateTime();
+                            }
+                        }
+                }
+        }
+
+    override function onSongLoad(event)
+    {
+        super.onSongLoad(event);
+    }
+
+    function initTimeBar()
+    {
+        timebar = new FlxBar(100, 0, "LEFT_TO_RIGHT", 350, 20, this, "timelerp", 0, 1);
+
+
+
+
+
+        timebar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+        timebar.value = 0;
+
+
+        background = new FlxSprite();
+        background.makeGraphic(timebar.width + 8, timebar.height + 8, 0xFF000000);
+
+        background.cameras = [PlayState.instance.camHUD];
+        timebar.cameras = [PlayState.instance.camHUD];
+
+        background.zIndex = 1001;
+        timebar.zIndex = 1002;
+
+        PlayState.instance.add(background);
+        PlayState.instance.add(timebar);
+    }
+
+    function verticalTimeBar()
+    {
+        timebar.setPosition(FlxG.width - 200, FlxG.height /2 - timebar.height / 2);
+        timebar.angle = 90;
+        timebar.flipX = true;
+
+        background.setPosition(timebar.x - 4, timebar.y - 4);
+        background.angle = 90;
+        background.flipX = true;
+
+ 
+    }
+
+    function showTime()
+    {
+        timetext = new FlxText();
+        timetext.text = "0:00";
+
+        timetext.setFormat(Paths.font("vcr.ttf"), 34, 0xFFFFFFFF, "center", FlxTextBorderStyle.OUTLINE, 0xFF000000);
+        timetext.borderSize = 2.5;
+        timetext.letterSpacing = 1.5;
+        timetext.updateHitbox();
+        timetext.zIndex = 1002;
+
+
+
+        switch (save.data.timebarpos)
+        {
+            case "Right":
+                timetext.setPosition(FlxG.width - timetext.width - 10, timebar.y - timebar.width / 2 - 30);
+            default:
+                timetext.setPosition(timebar.x + timebar.width / 2 - timetext.width / 2, timebar.y - 7);
+        }
+        PlayState.instance.add(timetext);
+        timetext.cameras = [PlayState.instance.camHUD];
+    }
+
+    function updateTime()
+    {
+        curtime = FlxMath.roundDecimal(Conductor.instance.songPosition / 1000, 0);
+        var timeleft = 0;
+
+        if (FlxG.sound.music != null)
+        {
+            timeleft = FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 0);
+
+        }
+        // idea taken from coolhud (i couldn't find a way to properly do it without lagging the game)
+        switch (save.data.timebarmode)
+        {
+            case "None":
+            
+            case "Time Elapsed":
+                timetext.text = FlxStringUtil.formatTime(curtime, false);
+
+            
+            case "Time Left":
+                timetext.text = FlxStringUtil.formatTime(timeleft - curtime, false);
+
+            
+        }
+
+        // stupid workaround but its okay
+        if (Conductor.instance.songPosition < 0)
+        {
+            timetext.text = "0:00";
+        }
+
+    }
+
+    function customTimeBar()
+    {
+        background.loadGraphic(Paths.image("timebar"));
+        background.setGraphicSize(timebar.width + 8, timebar.height + 8);
+        background.updateHitbox();
+        background.setPosition(timebar.x - 4, timebar.y - 4);
+        background.antialiasing = false;
+    }
+}
