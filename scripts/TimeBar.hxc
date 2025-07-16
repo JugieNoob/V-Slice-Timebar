@@ -5,7 +5,6 @@ import flixel.FlxSprite;
 import funkin.Conductor;
 import flixel.FlxG;
 import flixel.text.FlxText;
-import flixel.util.FlxSave;
 import flixel.ui.FlxBar;
 import flixel.math.FlxMath;
 import flixel.util.FlxStringUtil;
@@ -18,12 +17,10 @@ class TimeBar extends Module {
     var background:FlxSprite;
     var songpercentage:Float = 0;
     var timetext:FlxText;
-    var save:FlxSave;
 
     function new (){
         super("TimeBarMod");
-        save = new FlxSave();
-        save.bind("TimeBarMod", "JugieNoob");
+        FlxG.save.bind("TimeBarMod", "JugieNoob");
     }
 
     override function onCountdownStart(event)
@@ -37,16 +34,16 @@ class TimeBar extends Module {
         songpercentage = 0;
         var playerStrumline:FlxSprite = PlayState.instance.playerStrumline;
 
-        if (save.data.timebar)
+        if (FlxG.save.data.timebar)
         {
             initTimeBar();
-            if (save.data.customtimebar)
+            if (FlxG.save.data.customtimebar)
             {
                 customTimeBar();
             }
 
 
-            switch (save.data.timebarpos)
+            switch (FlxG.save.data.timebarpos)
             {
 
             
@@ -81,7 +78,7 @@ class TimeBar extends Module {
 
             }
 
-            switch (save.data.timebarmode)
+            switch (FlxG.save.data.timebarmode)
             {
                 case "None":
                 
@@ -114,7 +111,7 @@ class TimeBar extends Module {
                 songpercentage = (Conductor.instance.songPosition / FlxG.sound.music.length);
             }
  
-            if (PlayState.instance != null && save.data.timebar)
+            if (PlayState.instance != null && FlxG.save.data.timebar)
                 {
        
                     if (!PlayState.instance.isInCutscene && timebar != null )
@@ -181,7 +178,7 @@ class TimeBar extends Module {
 
 
 
-        switch (save.data.timebarpos)
+        switch (FlxG.save.data.timebarpos)
         {
             case "Right":
                 timetext.setPosition(FlxG.width - timetext.width - 10, timebar.y - timebar.width / 2 - 30);
@@ -203,7 +200,7 @@ class TimeBar extends Module {
 
         }
         // idea taken from coolhud (i couldn't find a way to properly do it without lagging the game)
-        switch (save.data.timebarmode)
+        switch (FlxG.save.data.timebarmode)
         {
             case "None":
             
