@@ -11,7 +11,6 @@ class TimeBarOptions extends Module {
 
     function new (){
         super("Time Bar Options", 22);
-        FlxG.save.bind("TimeBarMod", "JugieNoob");
 
         if (FlxG.save.data.timebar == null)
         {
