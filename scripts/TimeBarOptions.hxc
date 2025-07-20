@@ -18,11 +18,11 @@ class TimeBarOptions extends Module {
         }
         if (FlxG.save.data.timebarmode == null)
         {
-            FlxG.save.data.timebarmode = true;
+            FlxG.save.data.timebarmode = "Time Left";
         }
         if (FlxG.save.data.timebarpos == null)
         {
-            FlxG.save.data.timebarpos = false;
+            FlxG.save.data.timebarpos = "Top";
         }
         if (FlxG.save.data.customtimebar == null)
         {
