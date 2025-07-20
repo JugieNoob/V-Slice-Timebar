@@ -20,7 +20,6 @@ class TimeBar extends Module {
 
     function new (){
         super("TimeBarMod");
-        FlxG.save.bind("TimeBarMod", "JugieNoob");
     }
 
     override function onCountdownStart(event)
