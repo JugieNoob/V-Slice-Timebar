@@ -13,19 +13,17 @@ import funkin.Preferences;
 
 class timeBar extends Module {
 
-    var timeBarBG:FlxSprite;
     var songPercentage:Float;
 
+    var timeBarBG:FlxSprite;
     var timeBar:FlxBar;
     var timeBarEmptyColour = 0xFF000000;
     var timeBarFillColour = 0xFFFFFFFF;
 
-    var debugtext:FlxText;
-
     var timeText:FlxText;
     var timeTextColour = 0xFFFFFFFF;
     var timeTextOutlineColour = 0xFF000000;
-
+    var playerStrumline;
 
     function new (){
         super("timeBarMod");
@@ -38,19 +36,13 @@ class timeBar extends Module {
 
         if (Std.isOfType(event.targetState, PlayState))
         {
-            var playerStrumline:FlxSprite = PlayState.instance.playerStrumline;
+            playerStrumline = PlayState.instance.playerStrumline;
     
             initTimebar();
             showText();
+            verticalTimeBar();
             resetVariables();
 
-            debugtext = new FlxText();
-            debugtext.camera = PlayState.instance.camHUD;
-            debugtext.size = 18;
-            debugtext.updateHitbox();
-            debugtext.setPosition(30, FlxG.height - debugtext.height - 10);
-            debugtext.zIndex = 1000;
-            PlayState.instance.add(debugtext);
         }
     }
     // override function onCountdownStart(event)
@@ -94,7 +86,7 @@ class timeBar extends Module {
 
     //                 timeBarBG.setPosition(timeBar.x - 4, timeBar.y - 4);
     //             case "Right":
-    //                 verticaltimeBar();
+    //                 verticalTimeBar();
     //             case "Force Middle":
     //                 timeBar.setPosition( (FlxG.width / 2) - (timeBar.width / 2), 10);
 
@@ -139,11 +131,6 @@ class timeBar extends Module {
                 if (FlxG.sound.music != null)
                 {
                     songPercentage = (Conductor.instance.songPosition / FlxG.sound.music.length);
-   
-                    if (debugtext != null)
-                    {
-                        debugtext.text = songPercentage + " " + FlxG.sound.music.length;
-                    }
                 }
 
                 if (timeBarBG != null)
@@ -163,11 +150,18 @@ class timeBar extends Module {
     {
         timeBarBG = new FlxSprite();
         timeBarBG.loadGraphic(Paths.image("timebar"));
-        timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), (timeBarBG.height) / 2);
+        if (Preferences.downscroll)
+        {
+            timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2));
+        }
+        else
+        {
+            timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), timeBarBG.height / 2);
+        }
         timeBarBG.camera = PlayState.instance.camHUD;
         timeBarBG.zIndex = 1001;
 
-        timeBar = new FlxBar(100, 0, "LEFT_TO_RIGHT", timeBarBG.width - 4, timeBarBG.height - 8, this, "songPercentage", 0, 1);
+        timeBar = new FlxBar(100, 0, "LEFT_TO_RIGHT", timeBarBG.width - 8, timeBarBG.height - 8, this, "songPercentage", 0, 1);
         timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
         timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
         timeBar.camera = PlayState.instance.camHUD;
@@ -186,7 +180,7 @@ class timeBar extends Module {
         timeText.borderSize = 2;
         timeText.setPosition(timeBarBG.x + (timeBarBG.width / 2) - (timeText.width / 2), timeBarBG.y + (timeBarBG.height / 2) - (timeText.height / 2));
         timeText.camera = PlayState.instance.camHUD;
-
+        timeText.zIndex = 1003;
 
 
         // switch (FlxG.save.data.timeBarpos)
@@ -202,26 +196,67 @@ class timeBar extends Module {
 
     function updateTimeText()
     {
-        // timeText.text = PlayState.instance.currentSong.songName;
-        // timeText.text = PlayState.instance.currentSong.songName + " - " + FlxStringUtil.toTitleCase(PlayState.instance.currentDifficulty);
+        switch (FlxG.save.data.timebarmode)
+        {
+            case "None":
+                timeText.text = "";
+            case "Time Elapsed":
+                if (Conductor.instance.songPosition >= 0)
+                {
+                    timeText.text = FlxStringUtil.formatTime(Conductor.instance.songPosition / 1000, false);
+                }
+            case "Time Left":
+                if (FlxG.sound.music != null)
+                {
+                    timeText.text = "" + FlxStringUtil.formatTime((FlxG.sound.music.length - FlxG.sound.music.time) / 1000, false);
+                }
+            case "Song Name":
+                timeText.text = PlayState.instance.currentSong.songName;
+            case "Song Name + Difficulty":
+                timeText.text = PlayState.instance.currentSong.songName + " - " + FlxStringUtil.toTitleCase(PlayState.instance.currentDifficulty);
+
+        }
 
         
-        // if (Conductor.instance.songPosition >= 0)
-        // {
-        //     timeText.text = FlxStringUtil.formatTime(Conductor.instance.songPosition / 1000, false);
-        // } 
 
 
-        if (FlxG.sound.music != null)
-        {
-            timeText.text = "" + FlxG.sound.music.length - FlxG.sound.music.time;
-        }
+
+       
 
             
 
         // timeText.text = "" + Conductor.instance.songPosition;
-        timeText.setPosition(timeBarBG.x + (timeBarBG.width / 2) - (timeText.width / 2), timeBarBG.y + (timeBarBG.height / 2) - (timeText.height / 2));
-
+        
+        switch (FlxG.save.data.timeTextPos)
+        {
+            case "Default":
+                if (FlxG.save.data.timebarpos == "Right")
+                {
+                    if (Preferences.downscroll)
+                    {
+                        timeText.setPosition(timeBarBG.x - timeText.width, timeBarBG.y - timeText.height);
+                    }
+                    else
+                    {
+                        timeText.setPosition(timeBarBG.x - timeText.width, timeBarBG.y + timeBarBG.width);
+                    }
+                }
+                else
+                {
+                    timeText.setPosition(timeBarBG.x + (timeBarBG.width / 2) - (timeText.width / 2), timeBarBG.y + (timeBarBG.height / 2) - (timeText.height / 2));
+                }
+            case "Strumline":
+                if (Preferences.downscroll)
+                {
+                    timeText.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeText.width / 2), (playerStrumline.y + playerStrumline.height + timeText.height) + 4);
+                }
+                else
+                {
+                    timeText.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeText.width / 2), (timeText.height / 2) - 4);
+                }
+        }
+   
+        // timeText.setPosition(timeBarBG.x - timeText.width, timeBarBG.y + timeBarBG.width);
     }
 
     function resetVariables()
@@ -231,18 +266,21 @@ class timeBar extends Module {
     }
     
 
-    // function verticaltimeBar()
-    // {
-    //     timeBar.setPosition(FlxG.width - 200, FlxG.height /2 - timeBar.height / 2);
-    //     timeBar.angle = 90;
-    //     timeBar.flipX = true;
+    function verticalTimeBar()
+    {
 
-    //     timeBarBG.setPosition(timeBar.x - 4, timeBar.y - 4);
-    //     timeBarBG.angle = 90;
-    //     timeBarBG.flipX = true;
+        timeBarBG.setPosition(FlxG.width - (timeBarBG.height / 2), (FlxG.height / 2) - (timeBarBG.width / 2));
+        timeBarBG.origin.set(0, 0);
+        timeBarBG.angle = 90;
 
- 
-    // }
+        timeBar.setPosition(timeBarBG.x - 4, timeBarBG.y + 4);
+        timeBar.origin.set(0, 0);
+        timeBar.angle = 90;
+        timeBar.flipX = true;
+
+    
+
+    }
 
 
 
