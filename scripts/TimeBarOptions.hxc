@@ -12,9 +12,9 @@ class TimeBarOptions extends Module {
     function new (){
         super("Time Bar Options", 22);
 
-        if (FlxG.save.data.timebar == null)
+        if (FlxG.save.data.timebar == null || FlxG.save.data.timebar == false || FlxG.save.data.timebar == true)
         {
-            FlxG.save.data.timebar = true;
+            FlxG.save.data.timebar = "On";
         }
         if (FlxG.save.data.timebarmode == null || FlxG.save.data.timebarmode == true)
         {
@@ -48,10 +48,17 @@ class TimeBarOptions extends Module {
       
             var preferences = event.targetState.optionsCodex.pages.get("preferences");
 
-            preferences.createPrefItemCheckbox('Time Bar', 'Toggles the time bar.', function(value:Bool):Void {
-            FlxG.save.data.timebar = value; 
-            FlxG.save.flush();
-        }, FlxG.save.data.timebar);
+                preferences.createPrefItemEnum('Time Bar', 'Set the Time Bar', [
+                "On" => "On",
+                "Off" => "Off",
+                "Wide" => "Wide",
+                
+                
+            ],function(value:Bool):Void {
+                FlxG.save.data.timebar = value;
+                FlxG.save.flush();
+            }, FlxG.save.data.timebar);      
+
 
             preferences.createPrefItemEnum('Time Bar Text', 'Set what text should appear on the time bar', [
                 "Song Name" => "Song Name",

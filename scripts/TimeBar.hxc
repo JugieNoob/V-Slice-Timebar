@@ -10,6 +10,7 @@ import flixel.math.FlxMath;
 import flixel.util.FlxStringUtil;
 import flixel.text.FlxTextBorderStyle;
 import funkin.Preferences;
+import flixel.util.FlxColor;
 
 class TimeBar extends Module {
 
@@ -24,6 +25,10 @@ class TimeBar extends Module {
     var timeTextColour = 0xFFFFFFFF;
     var timeTextOutlineColour = 0xFF000000;
     var playerStrumline;
+    
+    var debugtext:FlxSprite;
+
+    var thecolor;
 
     function new (){
         super("timeBarMod");
@@ -34,15 +39,46 @@ class TimeBar extends Module {
     {
         super.onStateChangeEnd(event);
 
+   
         if (Std.isOfType(event.targetState, PlayState))
         {
             playerStrumline = PlayState.instance.playerStrumline;
+
+
+            debugtext = new FlxText();
+            debugtext.cameras = [PlayState.instance.camHUD];
+            debugtext.size = 18;
+            debugtext.updateHitbox();
+            debugtext.setPosition(30, FlxG.height - debugtext.height - 10);
+            debugtext.zIndex = 1000;
+            PlayState.instance.add(debugtext);
+
+            if (PlayState.instance.iconP2 != null)
+                {
+                    thecolor = FlxColor.fromInt(PlayState.instance.iconP2.pixels.getPixel(55,40));
+                    if (debugtext != null)
+                    {
+                        thecolor = FlxColor.fromString(FlxColor.toHexString(thecolor, false));
+                        debugtext.text = "P2 Color = " + thecolor;
+                        timeBarFillColour = thecolor;//FlxColor.toHexString(thecolor, false);
+
+
+                        // timeBar.createFilledBar(timeBarEmptyColour, PlayState.instance.iconP1.pixels);
+                        // timeBarBG.color = FlxColor.toHexString(thecolor);
+                    }
+                }
     
-            initTimebar();
+            if (FlxG.save.data.timebar != "Off")
+            {
+                initTimebar();
+                setTimeBar();
+            }
             showText();
-            setTimeBar();
             resetVariables();
 
+     
+
+       
         }
     }
  
@@ -65,6 +101,8 @@ class TimeBar extends Module {
                 {
                     updateTimeText();
                 }
+
+            
             }
     }
 
@@ -73,7 +111,13 @@ class TimeBar extends Module {
     function initTimebar()
     {
         timeBarBG = new FlxSprite();
-        timeBarBG.loadGraphic(Paths.image("timebar"));
+        switch (FlxG.save.data.timebar)
+        {
+            case "On":
+                timeBarBG.loadGraphic(Paths.image("timebar"));
+            case "Wide":
+                timeBarBG.loadGraphic(Paths.image("widetimebar"));
+        }
         timeBarBG.camera = PlayState.instance.camHUD;
         timeBarBG.zIndex = 1001;
 
