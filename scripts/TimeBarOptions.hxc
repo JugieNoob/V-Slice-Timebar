@@ -65,7 +65,13 @@ class TimeBarOptions extends Module {
                 FlxG.save.flush();
             }, FlxG.save.data.timebarmode);      
 
-            preferences.createPrefItemEnum('Time Bar Position', 'Set where the time bar should be', ["Top" => "Top", "Right" => "Right", "Force Middle" => "Force Middle",], function(value:Bool):Void {
+            preferences.createPrefItemEnum('Time Bar Position', 'Set where the time bar should be', [
+                "Top" => "Top", 
+                "Right" => "Right", 
+                "Left" => "Left",
+                "Force Middle" => "Force Middle",
+                "Strumline" => "Strumline",    
+            ], function(value:Bool):Void {
                 FlxG.save.data.timebarpos = value;
                 FlxG.save.flush();
 
