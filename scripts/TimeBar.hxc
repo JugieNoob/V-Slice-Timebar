@@ -54,7 +54,7 @@ class TimeBar extends Module {
             debugtext.updateHitbox();
             debugtext.setPosition(30, FlxG.height - debugtext.height - 10);
             debugtext.zIndex = 1000;
-            PlayState.instance.add(debugtext);
+            // PlayState.instance.add(debugtext);
 
      
             switch (FlxG.save.data.timebarcolour)
@@ -150,6 +150,10 @@ class TimeBar extends Module {
                 forceMiddlePosition();
             case "Top":
                 defaultTimeBarPosition();
+            case "Force Top":
+                forceTopTimeBarPosition();
+            case "Middle":
+                middlePosition();
             default:
                 defaultTimeBarPosition();
         }
@@ -159,7 +163,7 @@ class TimeBar extends Module {
     {
         if (playerStrumline.x == (FlxG.width / 2) - (playerStrumline.width / 2))
         {
-            forceMiddlePosition();
+            middlePosition();
             return;
         }
         timeBarBG.setPosition((FlxG.width / 2 - timeBar.width / 2) - 50 , 10);
@@ -170,8 +174,15 @@ class TimeBar extends Module {
         timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
 
     }
+    
+    function forceTopTimeBarPosition()
+    {
+        timeBarBG.setPosition((FlxG.width / 2 - timeBar.width / 2) - 50 , 10);
+        timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
 
-    function forceMiddlePosition()
+    }
+    
+    function middlePosition()
     {
         timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), timeBarBG.height / 2);
 
@@ -180,6 +191,12 @@ class TimeBar extends Module {
             timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
         }
 
+        timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
+    }
+
+    function forceMiddlePosition()
+    {
+        timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), timeBarBG.height / 2);
         timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
     }
 
@@ -262,7 +279,9 @@ class TimeBar extends Module {
                         timeText.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeText.width / 2), (timeText.height / 2) - 4);
                     }
                 }
-          
+            case "Force Top":
+                timeText.setPosition((FlxG.width / 2) - (timeText.width / 2), (timeText.height / 2) - 4);
+
         }
    
     }

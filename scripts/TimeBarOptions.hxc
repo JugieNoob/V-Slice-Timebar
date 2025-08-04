@@ -87,17 +87,20 @@ class TimeBarOptions extends Module {
 
             preferences.createPrefItemEnum('Time Bar Position', 'Set where the time bar should be', [
                 "Top" => "Top", 
-                "Right" => "Right", 
                 "Left" => "Left",
+                "Middle" => "Middle",
                 "Force Middle" => "Force Middle",
-                "Strumline" => "Strumline",    
+                "Force Top" => "Force Top", 
+                "Right" => "Right", 
+                "Strumline" => "Strumline", 
+                  
             ], function(value:Bool):Void {
                 FlxG.save.data.timebarpos = value;
                 FlxG.save.flush();
 
             }, FlxG.save.data.timebarpos);   
 
-            preferences.createPrefItemEnum('Time Text Position', 'Set where the time text should be', ["Default" => "Default", "Strumline" => "Strumline",], function(value:Bool):Void {
+            preferences.createPrefItemEnum('Time Text Position', 'Set where the time text should be', ["Default" => "Default", "Strumline" => "Strumline", "Force Top" => "Force Top",], function(value:Bool):Void {
                 FlxG.save.data.timeTextPos = value;
                 FlxG.save.flush();
 
