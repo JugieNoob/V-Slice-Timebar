@@ -30,7 +30,7 @@ class TimeBar extends Module {
     
     var debugtext:FlxSprite;
 
-    var thecolor;
+    var iconColour;
     var byteReader:ByteArrayData;
 
     function new (){
@@ -56,81 +56,9 @@ class TimeBar extends Module {
             debugtext.zIndex = 1000;
             PlayState.instance.add(debugtext);
 
-            // if (PlayState.instance.iconP2 != null)
-            //     {
-            //         var colourArray = PlayState.instance.iconP2.pixels.getPixels(new openfl.geom.Rectangle(PlayState.instance.iconP2.x,PlayState.instance.iconP2.y, PlayState.instance.iconP2.width, PlayState.instance.iconP2.height));
-            //         byteReader = new ByteArrayData();
-            //         if (colourArray != null)
-            //         {
-            //             for (i in 0...colourArray.bytesAvailable)
-            //             {
-            //                 // {
-            //                 // if (colourArray[i] == null)
-            //                 // { 
-            //                 //     if (debugtext != null)
-            //                 //     {
-            //                 //        debugtext.text = "aa " + colourArray[i]; 
-            //                 //     }
-            //                 // }
-                            
-            //                 if (colourArray.readByte(colourArray[i]) != 0)
-            //                 {
-            //                     // colorArray.remove(colorArray[i]);
-            //                     debugtext.text = "HELP " + colourArray.readByte(colourArray[i]);
-            //                 }
-                            
-                    
-                            
-            //             }
-            //             // debugtext.text = "aa " + colorArray.length;//colourArray.readByte(colourArray[0]);
-                        
-            //         }
-                
-            //         // thecolor = FlxColor.fromInt(PlayState.instance.iconP2.pixels.getPixel(55,40));
-            //         // if (debugtext != null)
-            //         // {
-            //         //     // thecolor = FlxColor.fromString(FlxColor.toHexString(thecolor, false));
-            //         //     // debugtext.text = "P2 Color = " + thecolor;
-            //         //     // timeBarFillColour = thecolor;//FlxColor.toHexString(thecolor, false);
-            //         //     debugtext.text = "" + colourArray.length;
-
-            //         //     // timeBar.createFilledBar(timeBarEmptyColour, PlayState.instance.iconP1.pixels);
-            //         //     // timeBarBG.color = FlxColor.toHexString(thecolor);
-            //         // }
-            //     }
-            if (PlayState.instance.iconP2 != null)
-                {
-                    var ypos = 20;
-                    var xpos = 20;
-                    // Try to get the colour 10 times
-                    for (i in 0...10)
-                    {
-                        thecolor = PlayState.instance.iconP2.pixels.getPixel(xpos,ypos);
-                           
-                        debugtext.text = "Found colour " + thecolor;
-
-                        if (thecolor != 0)
-                        {
-                            debugtext.text = "Found colour " + thecolor;
-                            break;
-                        }
-                        ypos += 5;
-                        xpos += 5;
-
-                    }
-                     ///PlayState.instance.iconP2.width / 2, PlayState.instance.iconP2.height / 2
-                    if (debugtext != null)
-                    {
-                        thecolor = FlxColor.fromString(FlxColor.toHexString(thecolor, false));
-                        // debugtext.text = "P2 Color = " + thecolor;
-                        timeBarFillColour = thecolor;//FlxColor.toHexString(thecolor, false);
-
-
-                        // timeBar.createFilledBar(timeBarEmptyColour, PlayState.instance.iconP1.pixels);
-                        // timeBarBG.color = FlxColor.toHexString(thecolor);
-                    }
-                }
-    
+     
+            findIconColour(PlayState.instance.iconP2);
+            timeBarFillColour = iconColour;
     
             if (FlxG.save.data.timebar != "Off")
             {
@@ -359,6 +287,30 @@ class TimeBar extends Module {
 
     
 
+    }
+
+    function findIconColour(icon)
+    {
+        if (icon != null)
+        {
+            var ypos = 20;
+            var xpos = 20;
+            // Try to get the colour 10 times
+            for (i in 0...10)
+            {
+                iconColour = icon.pixels.getPixel(xpos,ypos);
+                   
+                debugtext.text = "Found colour " + iconColour;
+                if (iconColour != 0)
+                {
+                    debugtext.text = "Found colour " + iconColour;
+                    break;
+                }
+                ypos += 5;
+                xpos += 5;
+            }
+            iconColour = FlxColor.fromString(FlxColor.toHexString(iconColour, false));
+        }
     }
 
 }
