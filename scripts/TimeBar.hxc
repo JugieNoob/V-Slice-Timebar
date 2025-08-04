@@ -60,7 +60,7 @@ class TimeBar extends Module {
             switch (FlxG.save.data.timebarcolour)
             {
                 case "Opponent Icon":
-                    findIconColour(PlayState.instance.iconP2);
+                    findIconColour(PlayState.instance.iconP1);
                     timeBarFillColour = iconColour;
                 case "Player Icon":
                     findIconColour(PlayState.instance.iconP1);
@@ -299,24 +299,36 @@ class TimeBar extends Module {
 
     function findIconColour(icon)
     {
+        var colorArray = [];
+        var lightestColour = 0;
         if (icon != null)
         {
-            var ypos = 20;
-            var xpos = 20;
-            // Try to get the colour 10 times
-            for (i in 0...10)
+            var ypos = 0;
+            var xpos = 0;
+            // Try to get the colour 20 times
+            for (i in 0...20)
             {
                 iconColour = icon.pixels.getPixel(xpos,ypos);
                    
                 debugtext.text = "Found colour " + iconColour;
                 if (iconColour != 0)
                 {
-                    debugtext.text = "Found colour " + iconColour;
-                    break;
+                    // debugtext.text = "Found colour " + iconColour;
+                    colorArray.push(iconColour);
                 }
                 ypos += 5;
                 xpos += 5;
             }
+            // Find the lightest colour
+            for (i in 0...colorArray.length)
+            {
+                if (colorArray[i] > lightestColour)
+                {
+                    iconColour = colorArray[i];
+                    lightestColour = colorArray[i];
+                }
+            }
+            debugtext.text = "Found colour " + iconColour + " Colour array " + colorArray;
             iconColour = FlxColor.fromString(FlxColor.toHexString(iconColour, false));
         }
     }
