@@ -311,7 +311,7 @@ class TimeBar extends Module {
                 iconColour = icon.pixels.getPixel(xpos,ypos);
                    
                 debugtext.text = "Found colour " + iconColour;
-                if (iconColour != 0 && !colorArray.contains(iconColour))
+                if (iconColour != 0 && !colorArray.contains(iconColour) && iconColour != 16777215)
                 {
                     // debugtext.text = "Found colour " + iconColour;
                     colorArray.push(iconColour);
@@ -323,14 +323,24 @@ class TimeBar extends Module {
                 xpos += 5;
             }
             // Find the lightest colour
-            for (i in 0...colorArray.length)
+            if (colorArray != [])
             {
-                if (colorArray[i] > lightestColour)
+                for (i in 0...colorArray.length)
                 {
-                    iconColour = colorArray[i];
-                    lightestColour = colorArray[i];
+                    if (colorArray[i] > lightestColour)
+                    {
+                        iconColour = colorArray[i];
+                        lightestColour = colorArray[i];
+                    }
                 }
+
             }
+            else
+            {
+                iconColour = 16777215;
+            }   
+      
+            
             debugtext.text = "Found colour " + iconColour + " Colour array " + colorArray;
             iconColour = FlxColor.fromString(FlxColor.toHexString(iconColour, false));
         }
