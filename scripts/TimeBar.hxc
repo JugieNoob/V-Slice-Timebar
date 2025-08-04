@@ -141,7 +141,7 @@ class TimeBar extends Module {
             case "Strumline":
                 timeBarBG.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeBarBG.width / 2), (timeBarBG.height / 2) - 4);
 
-                if (Preferences.downscroll)
+                if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
                 {
                     timeBarBG.y = (FlxG.height - timeBarBG.height) - 4;
                 }
@@ -163,7 +163,7 @@ class TimeBar extends Module {
             return;
         }
         timeBarBG.setPosition((FlxG.width / 2 - timeBar.width / 2) - 50 , 10);
-        if (Preferences.downscroll)
+        if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
         {
             timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
         }
@@ -175,7 +175,7 @@ class TimeBar extends Module {
     {
         timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), timeBarBG.height / 2);
 
-        if (Preferences.downscroll)
+        if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
         {
             timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
         }
@@ -227,7 +227,7 @@ class TimeBar extends Module {
             case "Default":
                 if (FlxG.save.data.timebarpos == "Right")
                 {
-                    if (Preferences.downscroll)
+                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
                     {
                         timeText.setPosition(timeBarBG.x - timeText.width, timeBarBG.y - timeText.height);
                     }
@@ -240,7 +240,7 @@ class TimeBar extends Module {
                 {
                     timeText.setPosition(timeBarBG.x - timeBarBG.height, timeBarBG.y + timeBarBG.width);
 
-                    if (Preferences.downscroll)
+                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
                     {
                         timeText.y = timeBarBG.y - timeText.height;
                     }
@@ -253,7 +253,7 @@ class TimeBar extends Module {
             case "Strumline":
                 if (FlxG.save.data.timebarpos != "Strumline")
                 {
-                    if (Preferences.downscroll)
+                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
                     {
                         timeText.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeText.width / 2), (FlxG.height - timeText.height) - 4); //(playerStrumline.y + playerStrumline.height - (timeText.height / 2)) + 4)
                     }
