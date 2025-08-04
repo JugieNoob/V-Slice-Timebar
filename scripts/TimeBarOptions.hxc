@@ -28,9 +28,9 @@ class TimeBarOptions extends Module {
         {
             FlxG.save.data.timebarpos = "Top";
         }
-        if (FlxG.save.data.customtimebar == null)
+        if (FlxG.save.data.timebarcolour == null)
         {
-            FlxG.save.data.customtimebar = false;
+            FlxG.save.data.timebarcolour = "Default (White)";
         }
 
         if (FlxG.save.data.timeTextPos == null)
@@ -58,6 +58,17 @@ class TimeBarOptions extends Module {
                 FlxG.save.data.timebar = value;
                 FlxG.save.flush();
             }, FlxG.save.data.timebar);      
+                    
+            preferences.createPrefItemEnum('Time Bar Fill Colour', 'Changes which colour should be shown when the bar is filling up.', [
+                "Default (White)" => "Default (White)",
+                "Opponent Icon" => "Opponent Icon",
+                "Player Icon" => "Player Icon",
+                
+                
+            ],function(value:Bool):Void {
+                FlxG.save.data.timebarcolour = value;
+                FlxG.save.flush();
+            }, FlxG.save.data.timebarcolour);      
 
 
             preferences.createPrefItemEnum('Time Bar Text', 'Set what text should appear on the time bar', [
@@ -91,11 +102,7 @@ class TimeBarOptions extends Module {
             }, FlxG.save.data.timeTextPos);      
 
 
-            preferences.createPrefItemCheckbox('Custom Time Bar', "Allows you to add your own timebar.", function(value:Bool):Void {
-            FlxG.save.data.customtimebar = value;
-            FlxG.save.flush();
-
-            }, FlxG.save.data.customtimebar);
+    
 
         }
     }

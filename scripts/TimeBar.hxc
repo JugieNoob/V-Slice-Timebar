@@ -57,8 +57,16 @@ class TimeBar extends Module {
             PlayState.instance.add(debugtext);
 
      
-            findIconColour(PlayState.instance.iconP2);
-            timeBarFillColour = iconColour;
+            switch (FlxG.save.data.timebarcolour)
+            {
+                case "Opponent Icon":
+                    findIconColour(PlayState.instance.iconP2);
+                    timeBarFillColour = iconColour;
+                case "Player Icon":
+                    findIconColour(PlayState.instance.iconP1);
+                    timeBarFillColour = iconColour;
+            }
+        
     
             if (FlxG.save.data.timebar != "Off")
             {
