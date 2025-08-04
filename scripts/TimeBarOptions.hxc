@@ -3,11 +3,11 @@ import funkin.ui.options.PreferencesMenu;
 import funkin.ui.options.OptionsState;
 import flixel.FlxG;
 import Std;
-
+import flixel.FlxSprite;
 
 class TimeBarOptions extends Module {
 
-
+    var preferences;
 
     function new (){
         super("Time Bar Options", 22);
@@ -46,9 +46,11 @@ class TimeBarOptions extends Module {
         if (Std.isOfType(event.targetState, OptionsState))
             {
       
-            var preferences = event.targetState.optionsCodex.pages.get("preferences");
+            preferences = event.targetState.optionsCodex.pages.get("preferences");
 
-                preferences.createPrefItemEnum('Time Bar', 'Set the Time Bar', [
+            createPrefSeparator("# TimeBar Options");
+
+            preferences.createPrefItemEnum('Time Bar', 'Set the Time Bar', [
                 "On" => "On",
                 "Off" => "Off",
                 "Wide" => "Wide",
@@ -101,11 +103,17 @@ class TimeBarOptions extends Module {
 
             }, FlxG.save.data.timeTextPos);      
 
-
+            createPrefSeparator("# End of TimeBar Options");
     
 
         }
     }
 
+    function createPrefSeparator(text:String) {
+        preferences.items.createItem(0, (120 * preferences.items.length) + 30, text, "BOLD", function(){}, true);
+        // Taken from https://gamebanana.com/mods/597782
+        preferences.preferenceItems.add(new FlxSprite().makeGraphic(0, 0, 0x00000000));
+        preferences.preferenceDesc.push("");
+    }
 
 }
