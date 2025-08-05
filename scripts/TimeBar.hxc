@@ -141,17 +141,17 @@ class TimeBar extends Module {
             case "Strumline":
                 timeBarBG.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeBarBG.width / 2), (timeBarBG.height / 2) - 4);
 
-                if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                if (!FlxG.save.data.forceTimeBarPos)
                 {
-                    timeBarBG.y = (FlxG.height - timeBarBG.height) - 4;
+                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                    {
+                        timeBarBG.y = (FlxG.height - timeBarBG.height) - 4;
+                    }
                 }
+          
                 timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
-            case "Force Middle":
-                forceMiddlePosition();
             case "Top":
                 defaultTimeBarPosition();
-            case "Force Top":
-                forceTopTimeBarPosition();
             case "Middle":
                 middlePosition();
             default:
@@ -167,17 +167,15 @@ class TimeBar extends Module {
             return;
         }
         timeBarBG.setPosition((FlxG.width / 2 - timeBar.width / 2) - 50 , 10);
-        if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+        if (!FlxG.save.data.forceTimeBarPos)
         {
-            timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
+            if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+            {
+                timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
+            }
         }
-        timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
 
-    }
-    
-    function forceTopTimeBarPosition()
-    {
-        timeBarBG.setPosition((FlxG.width / 2 - timeBar.width / 2) - 50 , 10);
+
         timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
 
     }
@@ -186,19 +184,16 @@ class TimeBar extends Module {
     {
         timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), timeBarBG.height / 2);
 
-        if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+        if (!FlxG.save.data.forceTimeBarPos)
         {
-            timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
+            if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+            {
+                timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
+            }
         }
-
         timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
     }
 
-    function forceMiddlePosition()
-    {
-        timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), timeBarBG.height / 2);
-        timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
-    }
 
     function showText()
     {

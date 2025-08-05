@@ -37,6 +37,16 @@ class TimeBarOptions extends Module {
         {
             FlxG.save.data.timeTextPos = "Default";
         }
+
+        if (FlxG.save.data.timebarpos == "Force Middle")
+        {
+            FlxG.save.data.timebarpos = "Middle";
+        }
+
+        if (FlxG.save.data.forceTimeBarPos == null)
+        {
+            FlxG.save.data.forceTimeBarPos = false;
+        }
     }
 
     function onStateChangeEnd(event)
@@ -73,7 +83,7 @@ class TimeBarOptions extends Module {
             }, FlxG.save.data.timebarcolour);      
 
 
-            preferences.createPrefItemEnum('Time Bar Text', 'Set what text should appear on the time bar', [
+            preferences.createPrefItemEnum('Time Bar Text', 'Set what text should appear on the Time Bar', [
                 "Song Name" => "Song Name",
                 "Song Name + Difficulty" => "Song Name + Difficulty",
                 "None" => "None",
@@ -85,12 +95,10 @@ class TimeBarOptions extends Module {
                 FlxG.save.flush();
             }, FlxG.save.data.timebarmode);      
 
-            preferences.createPrefItemEnum('Time Bar Position', 'Set where the time bar should be', [
+            preferences.createPrefItemEnum('Time Bar Position', 'Set where the Time Bar should be', [
                 "Top" => "Top", 
                 "Left" => "Left",
                 "Middle" => "Middle",
-                "Force Middle" => "Force Middle",
-                "Force Top" => "Force Top", 
                 "Right" => "Right", 
                 "Strumline" => "Strumline", 
                   
@@ -100,11 +108,19 @@ class TimeBarOptions extends Module {
 
             }, FlxG.save.data.timebarpos);   
 
+            preferences.createPrefItemCheckbox('Force Time Bar Position', 'If checked, downscroll will not affect the Y position of the Time Bar.', function(value:Bool):Void {
+            FlxG.save.data.forceTimeBarPos = value;
+            FlxG.save.flush();
+
+            }, FlxG.save.data.forceTimeBarPos);
+
             preferences.createPrefItemEnum('Time Text Position', 'Set where the time text should be', ["Default" => "Default", "Strumline" => "Strumline", "Force Top" => "Force Top",], function(value:Bool):Void {
                 FlxG.save.data.timeTextPos = value;
                 FlxG.save.flush();
 
             }, FlxG.save.data.timeTextPos);      
+
+
 
             createPrefSeparator("# End of TimeBar Options");
     
