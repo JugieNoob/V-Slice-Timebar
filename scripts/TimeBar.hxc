@@ -38,17 +38,12 @@ class TimeBar extends Module {
     function new (){
         super("timeBarMod");
     }
-    override function onStateChangeStart(event)
-    {
-        super.onStateChangeStart(event);
-        currentState = event.targetState;
-    }
 
     override function onStateChangeEnd(event)
     {
         super.onStateChangeEnd(event);
 
-   
+        currentState = event.targetState;
         if (Std.isOfType(event.targetState, PlayState))
         {
             playerStrumline = PlayState.instance.playerStrumline;
@@ -60,7 +55,7 @@ class TimeBar extends Module {
             debugtext.updateHitbox();
             debugtext.setPosition(30, FlxG.height - debugtext.height - 10);
             debugtext.zIndex = 1000;
-            // PlayState.instance.add(debugtext);
+            PlayState.instance.add(debugtext);
 
      
             switch (FlxG.save.data.timebarcolour)
@@ -90,8 +85,7 @@ class TimeBar extends Module {
  
     override function onUpdate(event)
     {
-            super.onUpdate(event);
-
+        super.onUpdate(event);
         if (Std.isOfType(currentState, PlayState))
         {
                 
@@ -112,7 +106,10 @@ class TimeBar extends Module {
                     updateTimeText();
                 }
 
-            
+                if (debugtext != null)
+                {
+                    debugtext.text = "" + currentState;
+                }
             }
         }
     }
