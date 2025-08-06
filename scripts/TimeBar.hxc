@@ -33,10 +33,16 @@ class TimeBar extends Module {
     var iconColour;
     var byteReader:ByteArrayData;
 
+    var currentState;
+
     function new (){
         super("timeBarMod");
     }
-  
+    override function onStateChangeStart(event)
+    {
+        super.onStateChangeStart(event);
+        currentState = event.targetState;
+    }
 
     override function onStateChangeEnd(event)
     {
@@ -86,6 +92,10 @@ class TimeBar extends Module {
     {
             super.onUpdate(event);
 
+        if (Std.isOfType(currentState, PlayState))
+        {
+                
+            
             if (PlayState.instance != null)
             {
                 if (FlxG.sound.music != null)
@@ -104,6 +114,7 @@ class TimeBar extends Module {
 
             
             }
+        }
     }
 
     // ------ Custom Functions
