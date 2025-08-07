@@ -64,9 +64,9 @@ class TimeBar extends Module {
             {
                 initTimebar();
                 setTimeBar();
+                showText();
+                resetVariables();
             }
-            showText();
-            resetVariables();
 
      
 
@@ -278,7 +278,10 @@ class TimeBar extends Module {
 
     function resetVariables()
     {
-        timeBar.value = 0;
+        if (timeBar != null)
+        {
+            timeBar.value = 0;
+        }
         songPercentage = 0;
     }
     
