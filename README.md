@@ -12,8 +12,35 @@ A mod for the **FNF V-Slice Engine** that implements a configurable Time Bar dur
 
 ## Screenshots
 
+<img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/3.png align=left width=47.5%>
+<img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/8.png width=47.5%>
+
+<br>
+
+<div>
+<img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/1.png align=left width=31%>
+<img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/2.png align=left width=31%>
+<img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/4.png width=31%>
+</div>
+
+<br>
+
+<div>
+  <img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/5.png align=left width=31%>
+  <img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/6.png align=left width=31%>
+  <img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/7.png width=31%>
+</div>
+
 
 ### Also works on mobile!
+
+<div>
+<img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/9.png align=left width=47.5%>
+<img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/githubimages/10.png width=47.5%>
+</div>  
+
+
+
 
 
 ## How to Install:
@@ -21,4 +48,4 @@ A mod for the **FNF V-Slice Engine** that implements a configurable Time Bar dur
 1.    Press the download button below.
 2.    Place the .zip file into the Friday Night Funkin' mods folder.
 
-**__Due to certain issues, the Time Bar does not work while testing a chart__**
+### ***Due to certain issues, the Time Bar does not work while testing a chart***
