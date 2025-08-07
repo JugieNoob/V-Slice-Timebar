@@ -43,7 +43,7 @@ A mod for the **FNF V-Slice Engine** that implements a configurable Time Bar dur
 
 
 
-## How to Install:
+## How to Install
 
 1.    Press the download button below.
 2.    Place the .zip file into the Friday Night Funkin' mods folder.
