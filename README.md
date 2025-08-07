@@ -1,16 +1,24 @@
 # V-Slice Timebar
 
-A mod that implements a time bar duing songs (like the ones found in Psych Engine and Kade Engine).
+A mod for the **FNF V-Slice Engine** that implements a configurable Time Bar during songs.
 
 ## Features:
 
--    Togglable time bar. (also works with downscroll!)
--    Togglable elapsed time overlay.
--    An option that allows you to move the timebar to the right side of the screen.
--    A customisable timebar background.
+-    **Togglable Time Bar with a normal and wide option.**
+-    **An option to set the Time Bar fill colour to the opponent's icon colour or the player's icon colour**
+-    **Togglable overlay that gives you info on the current song.**
+-    **An option that allows you to reposition the Time Bar.**
+-    **+ More!**
+
+## Screenshots
+
+
+### Also works on mobile!
 
 
 ## How to Install:
 
 1.    Press the download button below.
 2.    Place the .zip file into the Friday Night Funkin' mods folder.
+
+**__Due to certain issues, the Time Bar does not work while testing a chart__**

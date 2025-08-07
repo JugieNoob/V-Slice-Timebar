@@ -82,19 +82,6 @@ class TimeBarOptions extends Module {
                 FlxG.save.flush();
             }, FlxG.save.data.timebarcolour);      
 
-
-            preferences.createPrefItemEnum('Time Bar Text', 'Set what text should appear on the Time Bar', [
-                "Song Name" => "Song Name",
-                "Song Name + Difficulty" => "Song Name + Difficulty",
-                "None" => "None",
-                "Time Elapsed" => "Time Elapsed", 
-                "Time Left" => "Time Left",
-                
-            ],function(value:Bool):Void {
-                FlxG.save.data.timebarmode = value;
-                FlxG.save.flush();
-            }, FlxG.save.data.timebarmode);      
-
             preferences.createPrefItemEnum('Time Bar Position', 'Set where the Time Bar should be', [
                 "Top" => "Top", 
                 "Left" => "Left",
@@ -113,6 +100,18 @@ class TimeBarOptions extends Module {
             FlxG.save.flush();
 
             }, FlxG.save.data.forceTimeBarPos);
+
+            preferences.createPrefItemEnum('Time Bar Text', 'Set what text should appear on the Time Bar', [
+                "Song Name" => "Song Name",
+                "Song Name + Difficulty" => "Song Name + Difficulty",
+                "None" => "None",
+                "Time Elapsed" => "Time Elapsed", 
+                "Time Left" => "Time Left",
+                
+            ],function(value:Bool):Void {
+                FlxG.save.data.timebarmode = value;
+                FlxG.save.flush();
+            }, FlxG.save.data.timebarmode);     
 
             preferences.createPrefItemEnum('Time Text Position', 'Set where the time text should be', ["Default" => "Default", "Strumline" => "Strumline", "Force Top" => "Force Top",], function(value:Bool):Void {
                 FlxG.save.data.timeTextPos = value;

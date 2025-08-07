@@ -1,4 +1,0 @@
-Width for timebar background = 358
-Hight for timebar background = 28
-File name = "timebar"
-Antialiasing is off by default
