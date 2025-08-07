@@ -55,6 +55,8 @@ class TimeBar extends Module {
                 case "Player Icon":
                     findIconColour(PlayState.instance.iconP1);
                     timeBarFillColour = iconColour;
+                default:
+                    timeBarFillColour = 0xFFFFFFFF;
             }
         
     
