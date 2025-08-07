@@ -28,7 +28,6 @@ class TimeBar extends Module {
     var timeTextOutlineColour = 0xFF000000;
     var playerStrumline;
     
-    var debugtext:FlxSprite;
 
     var iconColour;
     var byteReader:ByteArrayData;
@@ -47,17 +46,7 @@ class TimeBar extends Module {
         if (Std.isOfType(event.targetState, PlayState))
         {
             playerStrumline = PlayState.instance.playerStrumline;
-
-
-            debugtext = new FlxText();
-            debugtext.cameras = [PlayState.instance.camHUD];
-            debugtext.size = 18;
-            debugtext.updateHitbox();
-            debugtext.setPosition(30, FlxG.height - debugtext.height - 10);
-            debugtext.zIndex = 1000;
-            PlayState.instance.add(debugtext);
-
-     
+   
             switch (FlxG.save.data.timebarcolour)
             {
                 case "Opponent Icon":
@@ -106,10 +95,6 @@ class TimeBar extends Module {
                     updateTimeText();
                 }
 
-                if (debugtext != null)
-                {
-                    debugtext.text = "" + currentState;
-                }
             }
         }
     }
@@ -332,10 +317,8 @@ class TimeBar extends Module {
             {
                 iconColour = icon.pixels.getPixel(xpos,ypos);
                    
-                debugtext.text = "Found colour " + iconColour;
                 if (iconColour != 0 && !colorArray.contains(iconColour) && iconColour != 16777215)
                 {
-                    // debugtext.text = "Found colour " + iconColour;
                     colorArray.push(iconColour);
                 }
                 if (ypos < 50)
@@ -363,7 +346,6 @@ class TimeBar extends Module {
             }   
       
             
-            debugtext.text = "Found colour " + iconColour + " Colour array " + colorArray;
             iconColour = FlxColor.fromString(FlxColor.toHexString(iconColour, false));
         }
     }
