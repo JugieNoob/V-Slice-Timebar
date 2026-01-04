@@ -77,7 +77,7 @@ class TimeBarOptions extends Module {
             Save.instance.flush();
         }, Save.instance.modOptions["TimeBarColour"]);      
 
-        preferences.createPrefItemEnum("Coloured Time Bar Method", "Choose which method the game should use to find the icon colours.", ["Old" => "Old", "New" => "New"], function(value:String){
+        preferences.createPrefItemEnum("Coloured Time Bar Method", "Choose which method the game should use to find the icon colours. (Slow may cause stutters!)", ["Fast" => "Fast", "Slow" => "Slow"], function(value:String){
 		Save.instance.modOptions["TimeBarIconColourMethod"] = value;
 		Save.instance.flush();
 		}, Save.instance.modOptions["TimeBarIconColourMethod"]);        

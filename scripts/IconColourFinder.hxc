@@ -16,7 +16,7 @@ class IconColourFinder
     {
         if (icon != null)
         {
-            if (Save.instance.modOptions["TimeBarIconColourMethod"] == "New")
+            if (Save.instance.modOptions["TimeBarIconColourMethod"] == "Slow")
             {
                 findIconColourNew(icon);
             }
@@ -121,8 +121,6 @@ class IconColourFinder
 			{
 				frequencyArray.push([colorArray[i], 0]);
 			}
-			
-		
 		}
 
 		winningArray = frequencyArray[0];
