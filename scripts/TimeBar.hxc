@@ -6,13 +6,11 @@ import funkin.Conductor;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
-import flixel.math.FlxMath;
 import flixel.util.FlxStringUtil;
 import flixel.text.FlxTextBorderStyle;
 import funkin.Preferences;
-import flixel.util.FlxColor;
-import openfl.geom.Rectangle;
 import openfl.utils.ByteArrayData;
+import funkin.save.Save;
 
 class TimeBar extends Module {
 
@@ -32,73 +30,88 @@ class TimeBar extends Module {
     var iconColour;
     var byteReader:ByteArrayData;
 
-    var currentState;
+    var playerID:Int = 0;
+    var opponentID:Int = 0;
 
     function new (){
-        super("timeBarMod");
+        super("timeBarMod", 10, {state:PlayState});
     }
 
     override function onStateChangeEnd(event)
     {
         super.onStateChangeEnd(event);
 
-        currentState = event.targetState;
-        if (Std.isOfType(event.targetState, PlayState))
-        {
-            playerStrumline = PlayState.instance.playerStrumline;
+        playerStrumline = PlayState.instance.playerStrumline;
    
-            switch (FlxG.save.data.timebarcolour)
-            {
-                case "Opponent Icon":
-                    IconColourFinder.findIconColour(PlayState.instance.iconP2);
-                    timeBarFillColour = iconColour;
-                case "Player Icon":
-                    IconColourFinder.findIconColour(PlayState.instance.iconP1);
-                    timeBarFillColour = iconColour;
-                default:
-                    timeBarFillColour = 0xFFFFFFFF;
-            }
-        
+        switch (Save.instance.modOptions["TimeBarColour"])
+        {
+            case "Opponent Icon":
+                timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP2);
+            case "Player Icon":
+                timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP1);
+            default:
+                timeBarFillColour = 0xFFFFFFFF;
+        }
     
-            if (FlxG.save.data.timebar != "Off")
-            {
-                initTimebar();
-                setTimeBar();
-                showText();
-                resetVariables();
-            }
+    
+        if (Save.instance.modOptions["TimeBar"] != "Off")
+        {
+            initTimebar();
+            setTimeBar();
+            showText();
+            resetVariables();
+        }
 
      
 
        
-        }
+        
     }
  
     override function onUpdate(event)
     {
-        super.onUpdate(event);
-        if (Std.isOfType(currentState, PlayState))
+        super.onUpdate(event);            
+        if (FlxG.sound.music != null)
         {
-                
-            
-            if (PlayState.instance != null)
-            {
-                if (FlxG.sound.music != null)
-                {
-                    songPercentage = (Conductor.instance.songPosition / FlxG.sound.music.length);
-                }
-
-                if (timeBarBG != null)
-                {
-                    timeBar.value = songPercentage;
-                }
-                if (timeText != null)
-                {
-                    updateTimeText();
-                }
-
-            }
+            songPercentage = (Conductor.instance.songPosition / FlxG.sound.music.length);
         }
+
+        if (timeBarBG != null)
+        {
+            timeBar.value = songPercentage;
+        }
+        if (timeText != null)
+        {
+            updateTimeText();
+        }
+
+        if (timeBar != null)
+		{
+	        switch (Save.instance.modOptions["TimeBarColour"])
+            {
+                case "Opponent Icon":
+                    if (opponentID != PlayState.instance.iconP2.characterId)
+				    {
+				    	opponentID = PlayState.instance.iconP2.characterId;
+
+				    	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP2);
+
+				    	timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
+                        timeBar.updateBar();
+				    }
+                case "Player Icon":
+                    if (playerID != PlayState.instance.iconP1.characterId)
+				    {
+				    	playerID = PlayState.instance.iconP1.characterId;
+
+				    	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP1);
+
+				    	timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
+                        timeBar.updateBar();
+				    }
+            }
+		}
+        
     }
 
     // ------ Custom Functions
@@ -106,7 +119,7 @@ class TimeBar extends Module {
     function initTimebar()
     {
         timeBarBG = new FlxSprite();
-        switch (FlxG.save.data.timebar)
+        switch (Save.instance.modOptions["TimeBar"])
         {
             case "On":
                 timeBarBG.loadGraphic(Paths.image("timebar"));
@@ -127,7 +140,7 @@ class TimeBar extends Module {
 
     function setTimeBar()
     {
-        switch (FlxG.save.data.timebarpos)
+        switch (Save.instance.modOptions["TimeBarPos"])
         {
             case "Right":
                 verticalTimeBar();
@@ -136,7 +149,7 @@ class TimeBar extends Module {
             case "Strumline":
                 timeBarBG.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeBarBG.width / 2), (timeBarBG.height / 2) - 4);
 
-                if (!FlxG.save.data.forceTimeBarPos)
+                if (!Save.instance.modOptions["ForceTimeBarPos"])
                 {
                     if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
                     {
@@ -162,7 +175,7 @@ class TimeBar extends Module {
             return;
         }
         timeBarBG.setPosition((FlxG.width / 2 - timeBar.width / 2) - 50 , 10);
-        if (!FlxG.save.data.forceTimeBarPos)
+        if (!Save.instance.modOptions["ForceTimeBarPos"])
         {
             if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
             {
@@ -179,7 +192,7 @@ class TimeBar extends Module {
     {
         timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), timeBarBG.height / 2);
 
-        if (!FlxG.save.data.forceTimeBarPos)
+        if (!Save.instance.modOptions["ForceTimeBarPos"])
         {
             if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
             {
@@ -207,7 +220,7 @@ class TimeBar extends Module {
 
     function updateTimeText()
     {
-        switch (FlxG.save.data.timebarmode)
+        switch (Save.instance.modOptions["TimeBarMode"])
         {
             case "None":
                 timeText.text = "";
@@ -229,10 +242,10 @@ class TimeBar extends Module {
         }
 
                 
-        switch (FlxG.save.data.timeTextPos)
+        switch (Save.instance.modOptions["TimeTextPos"])
         {
             case "Default":
-                if (FlxG.save.data.timebarpos == "Right")
+                if (Save.instance.modOptions["TimeBarPos"] == "Right")
                 {
                     if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
                     {
@@ -243,7 +256,7 @@ class TimeBar extends Module {
                         timeText.setPosition(timeBarBG.x - timeText.width, timeBarBG.y + timeBarBG.width);
                     }
                 }
-                else if (FlxG.save.data.timebarpos == "Left")
+                else if (Save.instance.modOptions["TimeBarPos"] == "Left")
                 {
                     timeText.setPosition(timeBarBG.x - timeBarBG.height, timeBarBG.y + timeBarBG.width);
 
@@ -258,7 +271,7 @@ class TimeBar extends Module {
                     timeText.setPosition(timeBarBG.x + (timeBarBG.width / 2) - (timeText.width / 2), timeBarBG.y + (timeBarBG.height / 2) - (timeText.height / 2));
                 }
             case "Strumline":
-                if (FlxG.save.data.timebarpos != "Strumline")
+                if (Save.instance.modOptions["TimeBarPos"] != "Strumline")
                 {
                     if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
                     {
@@ -289,11 +302,11 @@ class TimeBar extends Module {
     function verticalTimeBar()
     {
 
-        if (FlxG.save.data.timebarpos == "Right")
+        if (Save.instance.modOptions["TimeBarPos"] == "Right")
         {
             timeBarBG.setPosition(FlxG.width - (timeBarBG.height / 2), (FlxG.height / 2) - (timeBarBG.width / 2));
         }
-        else if (FlxG.save.data.timebarpos == "Left")
+        else if (Save.instance.modOptions["TimeBarPos"] == "Left")
         {
             timeBarBG.setPosition(timeBarBG.height * 1.5, (FlxG.height / 2) - (timeBarBG.width / 2));
         }
