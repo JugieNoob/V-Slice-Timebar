@@ -2,7 +2,7 @@
     "title": "Time Bar",
     "description": "Implements a togglable timebar.",
     "author": "JugieNoob",
-    "api_version": "0.7.0",
-    "mod_version": "1.3.0",
+    "api_version": "0.8.0",
+    "mod_version": "1.3.1",
     "license": "CC BY 4.0,MIT"
 }

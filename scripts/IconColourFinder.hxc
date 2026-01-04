@@ -1,0 +1,147 @@
+/*
+    Written by JugieNoob for the Healthbar+ mod
+    Mod Page: https://gamebanana.com/mods/612284
+    Mod Github: https://github.com/JugieNoob/V-Slice-Healthbar-Plus
+*/
+
+import flixel.util.FlxColor;
+import funkin.save.Save;
+import Std;
+
+
+class IconColourFinder
+{
+
+    public static function findIconColour(icon)
+    {
+        if (icon != null)
+        {
+            if (Save.instance.modOptions["TimeBarIconColourMethod"] == "New")
+            {
+                findIconColourNew(icon);
+            }
+            else
+            {
+                findIconColourOld(icon);
+            }
+        }
+
+        return 0xFFFFFFFF;
+
+    }
+
+
+    public static function findIconColourOld(icon)
+    {
+        var iconColour;
+        var colorArray = [];
+        var lightestColour = 0;
+        var ypos = 0;
+        var xpos = 0;
+        // Try to get the colours
+        for (i in 0...30)
+        {			
+            iconColour = icon.pixels.getPixel(xpos,ypos);
+               
+            if (iconColour != 0 && !colorArray.contains(iconColour) && iconColour != 16777215)
+            {
+                colorArray.push(iconColour);
+            }
+            if (ypos < 50)
+            {
+                ypos += 5;
+            }
+            xpos += 5;
+        }
+        // Find the lightest colour
+        if (colorArray != [])
+        {
+            for (i in 0...colorArray.length)
+            {
+                if (colorArray[i] > lightestColour)
+                {
+                    iconColour = colorArray[i];
+                    lightestColour = colorArray[i];
+                }
+            }
+
+        }
+        else
+        {
+            iconColour = 16777215;
+        }   
+
+
+        
+		return FlxColor.fromString(FlxColor.toHexString(iconColour, false));
+    }
+
+
+	public static function findIconColourNew(icon)
+    {
+		var iconColour;
+        var colorArray = [];
+
+		// Lower = more detail
+		var detail:Int = 3;
+    
+        if (icon == null)
+        {
+            return;
+        }
+		for (i in 0...Std.int(icon.width) / detail)
+		{
+			for (j in 0...Std.int(icon.height) / detail)
+			{
+				var pixelColour = icon.graphic.bitmap.getPixel(i * detail, j * detail);
+				if (pixelColour != 0)
+				{
+					colorArray.push(pixelColour);
+				}
+			}
+		}
+		frequencyArray = [];
+
+		for (i in 0...colorArray.length)
+		{
+			var foundItem = false;
+			for (item in frequencyArray)
+			{
+				if (item[0] == colorArray[i])
+				{
+					item[1] += 1;
+					foundItem = true;
+				}
+			}
+
+			if (!foundItem)
+			{
+				frequencyArray.push([colorArray[i], 0]);
+			}
+			
+		
+		}
+
+		trace(frequencyArray);
+
+		winningArray = frequencyArray[0];
+
+		for (i in 1...frequencyArray.length)
+		{
+			if (frequencyArray[i][1] > winningArray[1])
+			{
+				winningArray = frequencyArray[i];
+			}
+		}
+
+		iconColour = winningArray[0];
+        
+
+		// Clear all arrays after done
+		colorArray = [];
+		frequencyArray = [];
+		winningArray = [];
+        
+		return FlxColor.fromString(FlxColor.toHexString(iconColour, false));
+    }
+}
