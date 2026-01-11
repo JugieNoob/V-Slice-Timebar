@@ -1,14 +1,24 @@
-# V-Slice Timebar
+**<h1 align=center>V-Slice Timebar</h1>**
+
+<div align=center>
+  <img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/_polymod_icon.png width=32.5%>
+  <img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/.github/timebarmod.png width=55.5%>
+</div>
 
 A mod for the **FNF V-Slice Engine** that implements a configurable Time Bar during songs.
 
-## Features:
+## Features
 
 -    **Togglable Time Bar with a normal and wide option.**
 -    **An option to set the Time Bar fill colour to the opponent's icon colour or the player's icon colour**
--    **Togglable overlay that gives you info on the current song.**
+-    **Timebar overlay that gives you info on the current song.**
 -    **An option that allows you to reposition the Time Bar.**
 -    **+ More!**
+
+## How to Install
+
+1.    Press the download button below.
+2.    Place the .zip file into the Friday Night Funkin' mods folder.
 
 ## Screenshots
 
@@ -39,13 +49,8 @@ A mod for the **FNF V-Slice Engine** that implements a configurable Time Bar dur
 <img src=https://github.com/JugieNoob/V-Slice-Timebar/blob/main/.github/images/10.png width=47.5%>
 </div>  
 
+<br>
 
-
-
-
-## How to Install
-
-1.    Press the download button below.
-2.    Place the .zip file into the Friday Night Funkin' mods folder.
-
-### ***Due to certain issues, the Time Bar does not work while testing a chart***
+<div align=center>
+  <a href="https://gamebanana.com/mods/517012"><img src="https://gamebanana.com/mods/embeddables/517012?type=large"/></a>
+</div>
