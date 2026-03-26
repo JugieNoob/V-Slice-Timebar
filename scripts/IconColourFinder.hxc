@@ -14,9 +14,10 @@ class IconColourFinder
 
     public static function findIconColour(icon)
     {
+        findIconColourNew(icon);
         if (icon != null)
         {
-            if (Save.instance.modOptions["TimeBarIconColourMethod"] == "Slow")
+            if (Save.instance.modOptions["IconColourMethod"] == "Slow")
             {
                 findIconColourNew(icon);
             }
@@ -29,7 +30,7 @@ class IconColourFinder
         {
             return 0xFFFFFFFF;
         }
-
+        
 
     }
 
@@ -76,13 +77,13 @@ class IconColourFinder
 
 
         
-		return FlxColor.fromString(FlxColor.toHexString(iconColour, false));
+		return FlxColor.fromString("0xFF" + FlxColor.toHexString(iconColour, false));
     }
 
 
 	public static function findIconColourNew(icon)
     {
-		var iconColour;
+        var iconColour;
         var colorArray = [];
 
 		// Lower = more detail
@@ -121,6 +122,8 @@ class IconColourFinder
 			{
 				frequencyArray.push([colorArray[i], 0]);
 			}
+			
+		
 		}
 
 		winningArray = frequencyArray[0];
@@ -135,12 +138,12 @@ class IconColourFinder
 
 		iconColour = winningArray[0];
         
-
 		// Clear all arrays after done
 		colorArray = [];
 		frequencyArray = [];
 		winningArray = [];
-        
-		return FlxColor.fromString(FlxColor.toHexString(iconColour, false));
+
+		return FlxColor.fromString("0xFF" + FlxColor.toHexString(iconColour));
     }
 }
+    
