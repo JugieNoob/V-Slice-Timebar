@@ -37,9 +37,9 @@ class TimeBar extends Module {
         super("timeBarMod", 10, {state:PlayState});
     }
 
-    override function onStateChangeEnd(event)
+    override function onCountdownStart(event)
     {
-        super.onStateChangeEnd(event);
+        super.onCountdownStart(event);
 
         playerStrumline = PlayState.instance.playerStrumline;
    
@@ -61,13 +61,8 @@ class TimeBar extends Module {
             showText();
             resetVariables();
         }
-
-     
-
-       
-        
     }
- 
+     
     override function onUpdate(event)
     {
         super.onUpdate(event);            
