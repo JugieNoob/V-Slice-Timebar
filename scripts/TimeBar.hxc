@@ -40,6 +40,19 @@ class TimeBar extends Module {
     override function onCountdownStart(event)
     {
         super.onCountdownStart(event);
+        if (timeBarBG != null)
+        {
+            trace("Timebar is not null! Removing...");
+            PlayState.instance.remove(timeBarBG);
+            PlayState.instance.remove(timeBar);
+            PlayState.instance.remove(timeText);
+        }
+
+        if (PlayState.instance.isInCutscene)
+        {
+            return;
+        }
+		
 
         playerStrumline = PlayState.instance.playerStrumline;
    
@@ -62,10 +75,11 @@ class TimeBar extends Module {
             resetVariables();
         }
     }
-     
+
     override function onUpdate(event)
     {
-        super.onUpdate(event);            
+        super.onUpdate(event);           
+        
         if (FlxG.sound.music != null)
         {
             songPercentage = (Conductor.instance.songPosition / FlxG.sound.music.length);
