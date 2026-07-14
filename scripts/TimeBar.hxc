@@ -11,6 +11,13 @@ import flixel.text.FlxTextBorderStyle;
 import funkin.Preferences;
 import openfl.utils.ByteArrayData;
 import funkin.save.Save;
+import funkin.util.Constants;
+
+/*
+	V-Slice Timebar created by JugieNoob
+	GitHub Link: https://github.com/JugieNoob/V-Slice-Timebar
+	GameBanana Link: https://gamebanana.com/mods/517012
+*/
 
 class TimeBar extends Module {
 
@@ -99,25 +106,39 @@ class TimeBar extends Module {
 	        switch (Save.instance.modOptions["TimeBarColour"])
             {
                 case "Opponent Icon":
-                    if (opponentID != PlayState.instance.iconP2.characterId)
-				    {
-				    	opponentID = PlayState.instance.iconP2.characterId;
+                    if (PlayState.instance.iconP2 != null)
+                    {
+                        if (opponentID != PlayState.instance.iconP2.characterId)
+				        {
+				        	opponentID = PlayState.instance.iconP2.characterId;
 
-				    	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP2);
+				        	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP2);
+				        }
+                    }
+                    else
+                    {
+                        timeBarFillColour = Constants.COLOR_HEALTH_BAR_RED;
+                    }
+                   
 
-				    	timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
-                        timeBar.updateBar();
-				    }
+                    timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
+                    timeBar.updateBar();
                 case "Player Icon":
-                    if (playerID != PlayState.instance.iconP1.characterId)
-				    {
-				    	playerID = PlayState.instance.iconP1.characterId;
+                    if (PlayState.instance.iconP1 != null)
+                    {
+                        if (playerID != PlayState.instance.iconP1.characterId)
+				        {
+				        	playerID = PlayState.instance.iconP1.characterId;
 
-				    	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP1);
-
-				    	timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
-                        timeBar.updateBar();
-				    }
+				        	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP1);
+				        }
+                    }
+                    else
+                    {
+                        timeBarEmptyColour = Constants.COLOR_HEALTH_BAR_GREEN;
+                    }
+                    timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
+                    timeBar.updateBar();
             }
 		}
         

@@ -5,6 +5,12 @@ import Std;
 import flixel.FlxSprite;
 import funkin.save.Save;
 
+/*
+	V-Slice Timebar created by JugieNoob
+	GitHub Link: https://github.com/JugieNoob/V-Slice-Timebar
+	GameBanana Link: https://gamebanana.com/mods/517012
+*/
+
 class TimeBarOptions extends Module {
 
     var preferences;
