@@ -67,8 +67,18 @@ class TimeBar extends Module {
         {
             case "Opponent Icon":
                 timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP2);
+
+                if (timeBarFillColour == 0xFFFFFFFF)
+                {
+                    timeBarFillColour = Constants.COLOR_HEALTH_BAR_RED;
+                }
             case "Player Icon":
                 timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP1);
+
+                if (timeBarFillColour == 0xFFFFFFFF)
+                {
+                    timeBarFillColour = Constants.COLOR_HEALTH_BAR_GREEN;
+                }
             default:
                 timeBarFillColour = 0xFFFFFFFF;
         }
@@ -115,11 +125,6 @@ class TimeBar extends Module {
 				        	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP2);
 				        }
                     }
-                    else
-                    {
-                        timeBarFillColour = Constants.COLOR_HEALTH_BAR_RED;
-                    }
-                   
 
                     timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
                     timeBar.updateBar();
@@ -132,10 +137,6 @@ class TimeBar extends Module {
 
 				        	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP1);
 				        }
-                    }
-                    else
-                    {
-                        timeBarEmptyColour = Constants.COLOR_HEALTH_BAR_GREEN;
                     }
                     timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
                     timeBar.updateBar();
