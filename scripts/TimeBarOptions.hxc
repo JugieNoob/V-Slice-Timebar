@@ -50,7 +50,7 @@ class TimeBarOptions extends Module {
 
         if (Save.instance.modOptions["TimeBarIconColourMethod"] == null)
         {
-            Save.instance.modOptions["TimeBarIconColourMethod"] = "New";
+            Save.instance.modOptions["TimeBarIconColourMethod"] = "Fast";
         }
     }
 
