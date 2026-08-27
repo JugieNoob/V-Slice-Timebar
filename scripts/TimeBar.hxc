@@ -40,22 +40,43 @@ class TimeBar extends Module {
     var playerID:Int = 0;
     var opponentID:Int = 0;
 
+
+    var didSetupTimebar = false;
+
+
     function new (){
-        super("timeBarMod", 10, {state:PlayState});
+        super("timeBarMod", 10);
     }
+
+    override function onStateChangeBegin(event:StateChangeScriptEvent)
+	{
+		super.onStateChangeBegin(event);
+		// Reset the timebar setup boolean.
+		didSetupTimebar = false;
+	}
+
+    override function onSubStateOpenBegin(event:SubStateScriptEvent)
+  	{
+		super.onSubStateOpenBegin(event);
+
+		// Reset the timebar setup boolean if the player is entering a PlayState substate (usually used in the chart editor).
+		if (Std.isOfType(event.targetState, PlayState))
+		{
+			didSetupTimebar = false;
+		}
+  	}
+    
 
     override function onCountdownStart(event)
     {
         super.onCountdownStart(event);
-        if (timeBarBG != null)
+
+        if (PlayState.instance == null)
         {
-            trace("Timebar is not null! Removing...");
-            PlayState.instance.remove(timeBarBG);
-            PlayState.instance.remove(timeBar);
-            PlayState.instance.remove(timeText);
+            return;
         }
 
-        if (PlayState.instance.isInCutscene)
+        if (PlayState.instance.isInCutscene || didSetupTimebar)
         {
             return;
         }
@@ -90,12 +111,19 @@ class TimeBar extends Module {
             setTimeBar();
             showText();
             resetVariables();
+            didSetupTimebar = true;
         }
     }
 
+
     override function onUpdate(event)
     {
-        super.onUpdate(event);           
+        super.onUpdate(event);
+        
+        if (PlayState.instance == null)
+        {
+            return;
+        }
         
         if (FlxG.sound.music != null)
         {
@@ -167,6 +195,8 @@ class TimeBar extends Module {
 
         PlayState.instance.add(timeBarBG);
         PlayState.instance.add(timeBar);
+
+
     }
 
     function setTimeBar()
