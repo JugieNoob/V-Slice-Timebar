@@ -12,6 +12,8 @@ import funkin.Preferences;
 import openfl.utils.ByteArrayData;
 import funkin.save.Save;
 import funkin.util.Constants;
+import funkin.mobile.input.ControlsHandler;
+import funkin.mobile.ui.FunkinHitbox.FunkinHitboxControlSchemes;
 
 /*
 	V-Slice Timebar created by JugieNoob
@@ -43,6 +45,9 @@ class TimeBar extends Module {
 
     var didSetupTimebar = false;
 
+    var inArrowControlSchemeMode = false;
+
+
 
     function new (){
         super("timeBarMod", 10);
@@ -53,6 +58,15 @@ class TimeBar extends Module {
 		super.onStateChangeBegin(event);
 		// Reset the timebar setup boolean.
 		didSetupTimebar = false;
+
+        if (Preferences.controlsScheme == FunkinHitboxControlSchemes.Arrows && !ControlsHandler.hasExternalInputDevice && FlxG.onMobile)
+		{
+			inArrowControlSchemeMode = true;
+		}
+		else
+		{
+			inArrowControlSchemeMode = false;
+		}
 	}
 
     override function onSubStateOpenBegin(event:SubStateScriptEvent)
@@ -212,7 +226,7 @@ class TimeBar extends Module {
 
                 if (!Save.instance.modOptions["ForceTimeBarPos"])
                 {
-                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                    if (Preferences.downscroll || inArrowControlSchemeMode)
                     {
                         timeBarBG.y = (FlxG.height - timeBarBG.height) - 4;
                     }
@@ -238,7 +252,7 @@ class TimeBar extends Module {
         timeBarBG.setPosition((FlxG.width / 2 - timeBar.width / 2) - 50 , 10);
         if (!Save.instance.modOptions["ForceTimeBarPos"])
         {
-            if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+            if (Preferences.downscroll || inArrowControlSchemeMode)
             {
                 timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
             }
@@ -255,7 +269,7 @@ class TimeBar extends Module {
 
         if (!Save.instance.modOptions["ForceTimeBarPos"])
         {
-            if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+            if (Preferences.downscroll || inArrowControlSchemeMode)
             {
                 timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
             }
@@ -308,7 +322,7 @@ class TimeBar extends Module {
             case "Default":
                 if (Save.instance.modOptions["TimeBarPos"] == "Right")
                 {
-                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                    if (Preferences.downscroll || inArrowControlSchemeMode)
                     {
                         timeText.setPosition(timeBarBG.x - timeText.width, timeBarBG.y - timeText.height);
                     }
@@ -321,7 +335,7 @@ class TimeBar extends Module {
                 {
                     timeText.setPosition(timeBarBG.x - timeBarBG.height, timeBarBG.y + timeBarBG.width);
 
-                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                    if (Preferences.downscroll || inArrowControlSchemeMode)
                     {
                         timeText.y = timeBarBG.y - timeText.height;
                     }
@@ -334,7 +348,7 @@ class TimeBar extends Module {
             case "Strumline":
                 if (Save.instance.modOptions["TimeBarPos"] != "Strumline")
                 {
-                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                    if (Preferences.downscroll || inArrowControlSchemeMode)
                     {
                         timeText.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeText.width / 2), (FlxG.height - timeText.height) - 4); //(playerStrumline.y + playerStrumline.height - (timeText.height / 2)) + 4)
                     }
