@@ -59,8 +59,6 @@ class TimeBarOptions extends Module {
         super.onStateChangeEnd(event);
         preferences = event.targetState.optionsCodex.pages.get("preferences");
 
-        createPrefSeparator("# TimeBar Options");
-
         preferences.createPrefItemEnum('Time Bar', 'Set the Time Bar', [
             "On" => "On",
             "Off" => "Off",
@@ -123,21 +121,6 @@ class TimeBarOptions extends Module {
             Save.instance.modOptions["TimeTextPos"] = value;
             Save.instance.flush();
 
-        }, Save.instance.modOptions["TimeTextPos"]);      
-
-
-
-        createPrefSeparator("# End of TimeBar Options");
-    
-
-        
+        }, Save.instance.modOptions["TimeTextPos"]);              
     }
-
-    function createPrefSeparator(text:String) {
-        preferences.items.createItem(0, (120 * preferences.items.length) + 30, text, "bold", function(){}, true);
-        // Taken from https://gamebanana.com/mods/597782
-        preferences.preferenceItems.add(new FlxSprite().makeGraphic(0, 0, 0x00000000));
-        preferences.preferenceDesc.push("");
-    }
-
 }
