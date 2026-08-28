@@ -14,6 +14,9 @@ import funkin.save.Save;
 import funkin.util.Constants;
 import funkin.mobile.input.ControlsHandler;
 import funkin.mobile.ui.FunkinHitbox.FunkinHitboxControlSchemes;
+import flixel.ui.FlxBarFillDirection;
+
+import flixel.util.FlxColor;
 
 /*
 	V-Slice Timebar created by JugieNoob
@@ -202,7 +205,20 @@ class TimeBar extends Module {
         timeBarBG.camera = PlayState.instance.camHUD;
         timeBarBG.zIndex = 1001;
 
-        timeBar = new FlxBar(100, 0, "LEFT_TO_RIGHT", timeBarBG.width - 8, timeBarBG.height - 8, this, "songPercentage", 0, 1);
+
+        var fillDirection = FlxBarFillDirection.LEFT_TO_RIGHT;
+        var timeBarWidth = timeBarBG.width - 8;
+        var timeBarHeight = timeBarBG.height - 8;
+
+        if (Save.instance.modOptions["TimeBarPos"] == "Left" || Save.instance.modOptions["TimeBarPos"] == "Right")
+        {
+            fillDirection = FlxBarFillDirection.BOTTOM_TO_TOP;
+            timeBarWidth = timeBarBG.height - 8;
+            timeBarHeight = timeBarBG.width - 8;
+        }
+
+
+        timeBar = new FlxBar(100, 0, fillDirection, timeBarWidth, timeBarHeight, this, "songPercentage", 0, 1);
         timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
         timeBar.camera = PlayState.instance.camHUD;
         timeBar.zIndex = 1002;
@@ -218,8 +234,10 @@ class TimeBar extends Module {
         switch (Save.instance.modOptions["TimeBarPos"])
         {
             case "Right":
+                timeBarBG.setPosition(FlxG.width - (timeBarBG.height / 2), (FlxG.height / 2) - (timeBarBG.width / 2));
                 verticalTimeBar();
             case "Left":
+                timeBarBG.setPosition(timeBarBG.height * 1.5, (FlxG.height / 2) - (timeBarBG.width / 2));
                 verticalTimeBar();
             case "Strumline":
                 timeBarBG.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeBarBG.width / 2), (timeBarBG.height / 2) - 4);
@@ -233,8 +251,6 @@ class TimeBar extends Module {
                 }
           
                 timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
-            case "Top":
-                defaultTimeBarPosition();
             case "Middle":
                 middlePosition();
             default:
@@ -376,24 +392,8 @@ class TimeBar extends Module {
 
     function verticalTimeBar()
     {
-
-        if (Save.instance.modOptions["TimeBarPos"] == "Right")
-        {
-            timeBarBG.setPosition(FlxG.width - (timeBarBG.height / 2), (FlxG.height / 2) - (timeBarBG.width / 2));
-        }
-        else if (Save.instance.modOptions["TimeBarPos"] == "Left")
-        {
-            timeBarBG.setPosition(timeBarBG.height * 1.5, (FlxG.height / 2) - (timeBarBG.width / 2));
-        }
         timeBarBG.origin.set(0, 0);
         timeBarBG.angle = 90;
-
-        timeBar.setPosition(timeBarBG.x - 4, timeBarBG.y + 4);
-        timeBar.origin.set(0, 0);
-        timeBar.angle = 90;
-        timeBar.flipX = true;
-
-    
-
+        timeBar.setPosition(timeBarBG.x - 15, timeBarBG.y + 4);
     }
 }
