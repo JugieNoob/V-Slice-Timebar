@@ -9,9 +9,12 @@ import flixel.ui.FlxBar;
 import flixel.util.FlxStringUtil;
 import flixel.text.FlxTextBorderStyle;
 import funkin.Preferences;
-import openfl.utils.ByteArrayData;
 import funkin.save.Save;
 import funkin.util.Constants;
+import funkin.mobile.input.ControlsHandler;
+import funkin.mobile.ui.FunkinHitbox.FunkinHitboxControlSchemes;
+import flixel.ui.FlxBarFillDirection;
+
 
 /*
 	V-Slice Timebar created by JugieNoob
@@ -35,13 +38,14 @@ class TimeBar extends Module {
     
 
     var iconColour;
-    var byteReader:ByteArrayData;
 
     var playerID:Int = 0;
     var opponentID:Int = 0;
 
 
     var didSetupTimebar = false;
+
+    var inArrowControlSchemeMode = false;
 
 
     function new (){
@@ -53,6 +57,15 @@ class TimeBar extends Module {
 		super.onStateChangeBegin(event);
 		// Reset the timebar setup boolean.
 		didSetupTimebar = false;
+
+        if (Preferences.controlsScheme == FunkinHitboxControlSchemes.Arrows && !ControlsHandler.hasExternalInputDevice && FlxG.onMobile)
+		{
+			inArrowControlSchemeMode = true;
+		}
+		else
+		{
+			inArrowControlSchemeMode = false;
+		}
 	}
 
     override function onSubStateOpenBegin(event:SubStateScriptEvent)
@@ -110,7 +123,8 @@ class TimeBar extends Module {
             initTimebar();
             setTimeBar();
             showText();
-            resetVariables();
+
+            songPercentage = 0;
             didSetupTimebar = true;
         }
     }
@@ -188,15 +202,26 @@ class TimeBar extends Module {
         timeBarBG.camera = PlayState.instance.camHUD;
         timeBarBG.zIndex = 1001;
 
-        timeBar = new FlxBar(100, 0, "LEFT_TO_RIGHT", timeBarBG.width - 8, timeBarBG.height - 8, this, "songPercentage", 0, 1);
+
+        var fillDirection = FlxBarFillDirection.LEFT_TO_RIGHT;
+        var timeBarWidth = timeBarBG.width - 8;
+        var timeBarHeight = timeBarBG.height - 8;
+
+        if (Save.instance.modOptions["TimeBarPos"] == "Left" || Save.instance.modOptions["TimeBarPos"] == "Right")
+        {
+            fillDirection = FlxBarFillDirection.BOTTOM_TO_TOP;
+            timeBarWidth = timeBarBG.height - 8;
+            timeBarHeight = timeBarBG.width - 8;
+        }
+
+
+        timeBar = new FlxBar(0, 0, fillDirection, timeBarWidth, timeBarHeight, this, "songPercentage", 0, 1);
         timeBar.createFilledBar(timeBarEmptyColour, timeBarFillColour);
         timeBar.camera = PlayState.instance.camHUD;
         timeBar.zIndex = 1002;
 
         PlayState.instance.add(timeBarBG);
         PlayState.instance.add(timeBar);
-
-
     }
 
     function setTimeBar()
@@ -204,28 +229,32 @@ class TimeBar extends Module {
         switch (Save.instance.modOptions["TimeBarPos"])
         {
             case "Right":
+                timeBarBG.setPosition(FlxG.width - (timeBarBG.height / 2), (FlxG.height / 2) - (timeBarBG.width / 2));
                 verticalTimeBar();
             case "Left":
+                timeBarBG.setPosition(timeBarBG.height * 1.5, (FlxG.height / 2) - (timeBarBG.width / 2));
                 verticalTimeBar();
             case "Strumline":
-                timeBarBG.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeBarBG.width / 2), (timeBarBG.height / 2) - 4);
-
-                if (!Save.instance.modOptions["ForceTimeBarPos"])
-                {
-                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
-                    {
-                        timeBarBG.y = (FlxG.height - timeBarBG.height) - 4;
-                    }
-                }
-          
+                timeBarBG.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeBarBG.width / 2), (timeBarBG.height / 2) - 4);         
                 timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
-            case "Top":
-                defaultTimeBarPosition();
             case "Middle":
                 middlePosition();
             default:
                 defaultTimeBarPosition();
         }
+
+        if (Save.instance.modOptions["TimeBarPos"] != "Right" && Save.instance.modOptions["TimeBarPos"] != "Left")
+        {
+            if (!Save.instance.modOptions["ForceTimeBarPos"])
+            {
+                if (Preferences.downscroll || inArrowControlSchemeMode)
+                {
+                    timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
+                    timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
+                }
+            }
+        }         
+
     }
 
     function defaultTimeBarPosition()
@@ -236,13 +265,6 @@ class TimeBar extends Module {
             return;
         }
         timeBarBG.setPosition((FlxG.width / 2 - timeBar.width / 2) - 50 , 10);
-        if (!Save.instance.modOptions["ForceTimeBarPos"])
-        {
-            if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
-            {
-                timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
-            }
-        }
 
 
         timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
@@ -253,13 +275,6 @@ class TimeBar extends Module {
     {
         timeBarBG.setPosition((FlxG.width / 2) - (timeBarBG.width / 2), timeBarBG.height / 2);
 
-        if (!Save.instance.modOptions["ForceTimeBarPos"])
-        {
-            if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
-            {
-                timeBarBG.y = FlxG.height - (timeBarBG.height) - (timeBarBG.height / 2);
-            }
-        }
         timeBar.setPosition(timeBarBG.x + 4, timeBarBG.y + 4);
     }
 
@@ -308,7 +323,7 @@ class TimeBar extends Module {
             case "Default":
                 if (Save.instance.modOptions["TimeBarPos"] == "Right")
                 {
-                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                    if (Preferences.downscroll || inArrowControlSchemeMode)
                     {
                         timeText.setPosition(timeBarBG.x - timeText.width, timeBarBG.y - timeText.height);
                     }
@@ -321,7 +336,7 @@ class TimeBar extends Module {
                 {
                     timeText.setPosition(timeBarBG.x - timeBarBG.height, timeBarBG.y + timeBarBG.width);
 
-                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                    if (Preferences.downscroll || inArrowControlSchemeMode)
                     {
                         timeText.y = timeBarBG.y - timeText.height;
                     }
@@ -334,9 +349,9 @@ class TimeBar extends Module {
             case "Strumline":
                 if (Save.instance.modOptions["TimeBarPos"] != "Strumline")
                 {
-                    if (Preferences.downscroll || Preferences.controlsScheme == "Arrows")
+                    if (Preferences.downscroll || inArrowControlSchemeMode)
                     {
-                        timeText.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeText.width / 2), (FlxG.height - timeText.height) - 4); //(playerStrumline.y + playerStrumline.height - (timeText.height / 2)) + 4)
+                        timeText.setPosition(playerStrumline.x + (playerStrumline.width / 2) - (timeText.width / 2), (FlxG.height - timeText.height) - 4);
                     }
                     else
                     {
@@ -348,38 +363,12 @@ class TimeBar extends Module {
 
         }
    
-    }
-
-    function resetVariables()
-    {
-        if (timeBar != null)
-        {
-            timeBar.value = 0;
-        }
-        songPercentage = 0;
-    }
-    
+    }    
 
     function verticalTimeBar()
     {
-
-        if (Save.instance.modOptions["TimeBarPos"] == "Right")
-        {
-            timeBarBG.setPosition(FlxG.width - (timeBarBG.height / 2), (FlxG.height / 2) - (timeBarBG.width / 2));
-        }
-        else if (Save.instance.modOptions["TimeBarPos"] == "Left")
-        {
-            timeBarBG.setPosition(timeBarBG.height * 1.5, (FlxG.height / 2) - (timeBarBG.width / 2));
-        }
         timeBarBG.origin.set(0, 0);
         timeBarBG.angle = 90;
-
-        timeBar.setPosition(timeBarBG.x - 4, timeBarBG.y + 4);
-        timeBar.origin.set(0, 0);
-        timeBar.angle = 90;
-        timeBar.flipX = true;
-
-    
-
+        timeBar.setPosition(timeBarBG.x - 15, timeBarBG.y + 4);
     }
 }
