@@ -4,6 +4,7 @@
     Mod Github: https://github.com/JugieNoob/V-Slice-Healthbar-Plus
 */
 
+import funkin.Assets;
 import flixel.util.FlxColor;
 import funkin.save.Save;
 import Std;
@@ -42,10 +43,13 @@ class IconColourFinder
         var lightestColour = 0;
         var ypos = 0;
         var xpos = 0;
+
+        var iconBitmap = Assets.getBitmapData(icon.graphic.key, false, false, false);
+        
         // Try to get the colours
         for (i in 0...30)
         {			
-            iconColour = icon.pixels.getPixel(xpos,ypos);
+            iconColour = iconBitmap.getPixel(xpos,ypos);
                
             if (iconColour != 0 && !colorArray.contains(iconColour) && iconColour != 16777215)
             {
@@ -93,18 +97,24 @@ class IconColourFinder
         {
             return;
         }
-		for (i in 0...Std.int(icon.width) / detail)
+
+        var iconBitmap = Assets.getBitmapData(icon.graphic.key, false, false, false);
+
+        
+        for (i in 0...Std.int(iconBitmap.width) / detail)
 		{
-			for (j in 0...Std.int(icon.height) / detail)
+			for (j in 0...Std.int(iconBitmap.height) / detail)
 			{
-				var pixelColour = icon.graphic.bitmap.getPixel(i * detail, j * detail);
+				var pixelColour = iconBitmap.getPixel(i * detail, j * detail);
+
 				if (pixelColour != 0)
 				{
 					colorArray.push(pixelColour);
 				}
 			}
 		}
-		frequencyArray = [];
+
+		var frequencyArray = [];
 
 		for (i in 0...colorArray.length)
 		{
@@ -126,7 +136,7 @@ class IconColourFinder
 		
 		}
 
-		winningArray = frequencyArray[0];
+		var winningArray = frequencyArray[0];
 
 		for (i in 1...frequencyArray.length)
 		{

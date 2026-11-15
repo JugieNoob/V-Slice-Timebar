@@ -11,10 +11,10 @@ import flixel.text.FlxTextBorderStyle;
 import funkin.Preferences;
 import funkin.save.Save;
 import funkin.util.Constants;
-import funkin.mobile.input.ControlsHandler;
-import funkin.mobile.ui.FunkinHitbox.FunkinHitboxControlSchemes;
+import funkin.touch.input.ControlsHandler;
+import funkin.touch.ui.FunkinHitbox.FunkinHitboxControlSchemes;
 import flixel.ui.FlxBarFillDirection;
-
+import IconColourFinder;
 
 /*
 	V-Slice Timebar created by JugieNoob
@@ -39,8 +39,8 @@ class TimeBar extends Module {
 
     var iconColour;
 
-    var playerID:Int = 0;
-    var opponentID:Int = 0;
+    var playerID:String;
+    var opponentID:String;
 
 
     var didSetupTimebar = false;
@@ -96,6 +96,9 @@ class TimeBar extends Module {
 		
 
         playerStrumline = PlayState.instance.playerStrumline;
+        opponentID = PlayState.instance.iconP2.characterId;
+        playerID = PlayState.instance.iconP1.characterId;
+
    
         switch (Save.instance.modOptions["TimeBarColour"])
         {
@@ -176,6 +179,7 @@ class TimeBar extends Module {
                         if (playerID != PlayState.instance.iconP1.characterId)
 				        {
 				        	playerID = PlayState.instance.iconP1.characterId;
+                            
 
 				        	timeBarFillColour = IconColourFinder.findIconColour(PlayState.instance.iconP1);
 				        }
